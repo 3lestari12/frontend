@@ -1,24 +1,77 @@
 <template>
-  <div class="d-flex flex-column min-vh-100">
+  <div class="d-flex flex-column min-vh-100 bg-light">
     <Header :user="user" @toggle-sidebar="toggleSidebar" @logout="logout" />
 
     <div class="d-flex flex-grow-1">
       <Sidebar :isOpen="sidebarOpen" />
 
       <main
-        class="flex-grow-1 p-4"
+        class="flex-grow-1 p-3 p-md-5"
         :style="{
           marginLeft: sidebarOpen && windowWidth >= 768 ? '16rem' : '0',
           transition: 'margin-left 0.3s ease',
-          marginTop: '56px',  /* supaya tidak ketutupan header */
+          marginTop: '56px',
         }"
       >
-        <h2 class="mb-4">Dashboard</h2>
-        <p>Selamat datang, {{ user.name }} ({{ user.nopegawai }})</p>
+        <div class="container-lg">
+          <div class="row">
+            <div class="col-12">
+              <div class="d-flex align-items-center mb-4">
+                <h2 class="mb-0 text-primary fw-bold">Dashboard</h2>
+                <span class="ms-3 text-secondary">
+                  <i class="bi bi-speedometer2"></i>
+                </span>
+              </div>
+              <p class="lead text-muted">Selamat datang kembali, <span class="fw-semibold text-dark">{{ user.name }}</span>! Kelola sistem dengan mudah.</p>
+            </div>
+          </div>
 
-        <button @click="logout" class="btn btn-danger mt-3">
-          Logout
-        </button>
+          <div class="row g-4 mt-2">
+            <div class="col-lg-6">
+              <div class="card shadow-sm border-0 rounded-4 h-100">
+                <div class="card-body p-4">
+                  <h5 class="card-title text-success mb-3 d-flex align-items-center">
+                    <i class="bi bi-person-circle me-2"></i> Detail Pengguna
+                  </h5>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      <span class="text-muted">Nama:</span>
+                      <span class="fw-bold">{{ user.name }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      <span class="text-muted">Nomor Pegawai:</span>
+                      <span class="fw-bold">{{ user.nopegawai }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      <span class="text-muted">Dept:</span>
+                      <span class="badge bg-primary text-uppercase">{{ user.dept }}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="card shadow-sm border-0 rounded-4 h-100">
+                <div class="card-body p-4 d-flex flex-column align-items-center justify-content-center">
+                  <h5 class="card-title text-info mb-3 d-flex align-items-center">
+                    <i class="bi bi-gear-fill me-2"></i> Sistem Aktif
+                  </h5>
+                  <div class="text-center">
+                    <img src="/images/hallo.gif" class="img-fluid rounded-3 shadow-sm mb-3" alt="Working GIF" style="max-height: 200px;">
+                    <p class="text-muted">Sistem berjalan dengan optimal. Selamat bekerja!</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 mt-4 text-center">
+              <button @click="logout" class="btn btn-danger btn-lg rounded-pill shadow-lg px-5">
+                <i class="bi bi-box-arrow-right me-2"></i> Logout
+              </button>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
     <Footer />

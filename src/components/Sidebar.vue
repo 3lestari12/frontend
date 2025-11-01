@@ -14,7 +14,7 @@
       </router-link>
 
       <!-- Dropdown Suratjalan -->
-      <div>
+      <div v-if="['expedisi','it','manager','sekretaris','akuntansi'].includes(user.dept?.toLowerCase())">
         <a
           href="#"
           class="nav-link d-flex align-items-center mb-2"
@@ -39,13 +39,12 @@
             Suratjalan
           </router-link>
           <router-link
-            to="/dashboard"
+            to="/suratmaker"
             class="nav-link mb-1"
             active-class="active"
           >
             Surat Maker
           </router-link>
-
           <router-link
             to="/hasilscanekspedisi"
             class="nav-link mb-1"
@@ -56,8 +55,36 @@
         </div>
       </div>
 
+      <!-- Dropdown IDP PO -->
+      <div v-if="['expedisi','it','manager','sekretaris','akuntansi'].includes(user.dept?.toLowerCase())">
+        <a
+          href="#"
+          class="nav-link d-flex align-items-center mb-2"
+          @click.prevent="toggleIdpPoDropdown"
+          :class="{ active: isIdpPoOpen }"
+          style="cursor:pointer;"
+        >
+          <i class="bi bi-collection-fill me-2"></i>
+          IDP Jatuh Tempo
+          <i
+            class="bi"
+            :class="isIdpPoOpen ? 'bi-caret-down-fill ms-auto' : 'bi-caret-right-fill ms-auto'"
+          ></i>
+        </a>
+
+        <div v-show="isIdpPoOpen" class="ps-3">
+          <router-link
+            to="/idppo"
+            class="nav-link mb-1"
+            active-class="active"
+          >
+            Daftar IDP JT
+          </router-link>
+        </div>
+      </div>
+
       <!-- Dropdown ERP -->
-      <div v-if="user.dept === 'IT'">
+      <div v-if="['it', 'manager', 'sekretaris'].includes(user.dept?.toLowerCase())">
         <a
           href="#"
           class="nav-link d-flex align-items-center mb-2 position-relative"
@@ -80,6 +107,7 @@
             to="/complain/status"
             class="nav-link mb-1"
             active-class="active"
+            v-if="['it', 'manager'].includes(user.dept?.toLowerCase())"
           >
             Complain Pending
           <span v-if="pendingCount > 0" class="badge">{{ pendingCount }}</span>
@@ -92,7 +120,10 @@
             All Complain
           </router-link>
         </div>
-        <router-link
+
+
+        <!------  USER LIST  ------->
+        <router-link v-if="user.dept === 'IT'"
         to="/user"
         class="nav-link d-flex align-items-center mb-2"
         active-class="active"
@@ -102,6 +133,231 @@
       </router-link>
       </div>
 
+
+
+       <!-- Dropdown Building -->
+      <div v-if="['it', 'manager', 'sekretaris', 'wakil manager', 'fco'].includes(user.dept?.toLowerCase())">
+        <a
+          href="#"
+          class="nav-link d-flex align-items-center mb-2"
+          @click.prevent="toggleBuildingDropdown"
+          :class="{ active: isBuildingOpen }"
+          style="cursor:pointer;"
+        >
+          <i class="bi bi-building-fill me-2"></i>
+          General Affair
+          <i
+            class="bi"
+            :class="isBuildingOpen ? 'bi-caret-down-fill ms-auto' : 'bi-caret-right-fill ms-auto'"
+          ></i>
+        </a>
+
+        <div v-show="isBuildingOpen" class="ps-3">
+          <router-link
+            to="/building"
+            class="nav-link mb-1"
+            active-class="active"
+          >
+            Building Maintenance
+          </router-link>
+        </div>
+      </div>
+
+      <!-- Dropdown Barang IT -->
+      <div v-if="['it', 'manager', 'sekretaris', 'wakil manager'].includes(user.dept?.toLowerCase())">
+        <a
+          href="#"
+          class="nav-link d-flex align-items-center mb-2"
+          @click.prevent="toggleBarangITDropdown"
+          :class="{ active: isBarangITOpen }"
+          style="cursor:pointer;"
+        >
+          <i class="bi bi-pc-display-horizontal me-2"></i>
+          IT
+          <i
+            class="bi"
+            :class="isBarangITOpen ? 'bi-caret-down-fill ms-auto' : 'bi-caret-right-fill ms-auto'"
+          ></i>
+        </a>
+
+        <div v-show="isBarangITOpen" class="ps-3">
+          
+          <router-link
+            to="/barangit"
+            class="nav-link mb-1"
+            active-class="active"
+          >
+            Barang IT
+          </router-link>
+          <router-link
+            to="/riwayat-pesananan-it"
+            class="nav-link mb-1"
+            active-class="active"
+          >
+            Pesanan BarangIT
+          </router-link>
+          <hr>
+          <router-link
+            to="/komplainit"
+            class="nav-link mb-1"
+            active-class="active"
+          >
+            Komplain IT
+          </router-link>
+          <router-link
+            to="/barcoderequest"
+            class="nav-link mb-1"
+            active-class="active"
+          >
+            Permintaan Barcode
+          </router-link>
+          <hr>
+          <router-link
+            to="/komputer"
+            class="nav-link mb-1"
+            active-class="active"
+          >
+            Daftar komputer
+          </router-link>
+          
+          <router-link to="/planningerp"
+           class="nav-link mb-1" 
+           active-class="active">
+           Planning ERP
+          </router-link>
+        </div>
+      </div>
+
+      <!-- Dropdown Gudang -->
+      <div v-if="['administrasi','it','manager','sekretaris'].includes(user.dept?.toLowerCase())">
+        <a
+          href="#"
+          class="nav-link d-flex align-items-center mb-2"
+          @click.prevent="toggleGudangBDropdown"
+          :class="{ active: isGudangBOpen }"
+          style="cursor:pointer;"
+        >
+          <i class="bi bi-houses-fill me-2"></i>
+          Gudang Barang
+          <i
+            class="bi"
+            :class="isGudangBOpen ? 'bi-caret-down-fill ms-auto' : 'bi-caret-right-fill ms-auto'"
+          ></i>
+        </a>
+
+        <div v-show="isGudangBOpen" class="ps-3">
+          <router-link
+            to="/gudang"
+            class="nav-link mb-1"
+            active-class="active"
+          >
+            Daftar Barang
+          </router-link>
+           <router-link
+            to="/p-gudang"
+            class="nav-link mb-1"
+            active-class="active"
+          >
+            Pesanan Barang
+          </router-link>
+        </div>
+      </div>
+
+      <!-- Dropdown Gudang -->
+<div v-if="['it','manager','sekretaris','hrd'].includes(user.dept?.toLowerCase())">
+  <a
+    href="#"
+    class="nav-link d-flex align-items-center mb-2"
+    @click.prevent="toggleLokerDropdown"
+    :class="{ active: isLokerOpen }"
+    style="cursor:pointer;"
+  >
+    <i class="bi bi-person-lines-fill me-2"></i>
+    HRD
+    <i
+      class="bi"
+      :class="isLokerOpen ? 'bi-caret-down-fill ms-auto' : 'bi-caret-right-fill ms-auto'"
+    ></i>
+  </a>
+
+  <div v-show="isLokerOpen" class="ps-3">
+    <router-link
+      to="/loker"
+      class="nav-link mb-1"
+      active-class="active"
+    >
+      Daftar Loker
+    </router-link>
+
+    <router-link
+      to="/daftar-pelamar"
+      class="nav-link mb-1"
+      active-class="active"
+    >
+      Daftar Pelamar
+    </router-link>
+
+    <router-link
+      to="/contact-messages"
+      class="nav-link mb-1"
+      active-class="active"
+    >
+      Contact Message
+    </router-link>
+  </div>
+</div>
+
+
+ <!-- Dropdown Building -->
+      <div v-if="['it', 'manager', 'sekretaris', 'wakil manager', 'target', 'expedisi'].includes(user.dept?.toLowerCase())">
+        <a
+          href="#"
+          class="nav-link d-flex align-items-center mb-2"
+          @click.prevent="toggleTargetDropdown"
+          :class="{ active: isTargetOpen }"
+          style="cursor:pointer;"
+        >
+          <i class="bi bi-easel2 me-2"></i>
+          Target
+          <i
+            class="bi"
+            :class="isTargetOpen ? 'bi-caret-down-fill ms-auto' : 'bi-caret-right-fill ms-auto'"
+          ></i>
+        </a>
+
+        <div v-show="isTargetOpen" class="ps-3">
+          <router-link
+            to="/target"
+            class="nav-link mb-1"
+            active-class="active"
+          >
+           Laporan Target TLSI
+          </router-link>
+          <router-link
+            to="/target-finishing"
+            class="nav-link mb-1"
+            active-class="active"
+          >
+           Hasil Piece Work
+          </router-link>
+          <router-link
+            to="/scan-barcode-detail"
+            class="nav-link mb-1"
+            active-class="active"
+          >
+           Scan Barcode Detail
+          </router-link>
+          <router-link
+            to="/getprod4a"
+            class="nav-link mb-1"
+            active-class="active"
+          >
+           Laporan Prod4
+          </router-link>
+        </div>
+
+
+      </div>
     </nav>
   </aside>
 </template>
@@ -128,6 +384,12 @@ const emit = defineEmits(['update:isOpen'])
 const pendingCount = ref(0)
 const isSuratjalanOpen = ref(false)
 const isComplainOpen = ref(false)
+const isBuildingOpen = ref(false)
+const isBarangITOpen = ref(false)
+const isIdpPoOpen = ref(false)
+const isGudangBOpen = ref(false)
+const isLokerOpen = ref(false)
+const isTargetOpen = ref(false)
 
 function closeSidebarOnMobile() {
   if (window.innerWidth < 768) {
@@ -141,6 +403,30 @@ function toggleSuratjalanDropdown() {
 
 function toggleComplainDropdown() {
   isComplainOpen.value = !isComplainOpen.value
+}
+
+function toggleBuildingDropdown() {
+  isBuildingOpen.value = !isBuildingOpen.value
+}
+
+function toggleBarangITDropdown() {
+  isBarangITOpen.value = !isBarangITOpen.value
+}
+
+function toggleIdpPoDropdown() {
+  isIdpPoOpen.value = !isIdpPoOpen.value
+}
+
+function toggleGudangBDropdown() {
+  isGudangBOpen.value = !isGudangBOpen.value
+}
+
+function toggleLokerDropdown() {
+  isLokerOpen.value = !isLokerOpen.value
+}
+
+function toggleTargetDropdown() {
+  isTargetOpen.value = !isTargetOpen.value
 }
 
 async function fetchPendingCount() {

@@ -496,19 +496,25 @@ onMounted(() => {
 });
 
 // Fungsi format tanggal Indonesia
-function formatDate(tgl) {
-  if (!tgl) return '-';
-  const d = new Date(tgl);
-  return `${String(d.getUTCDate()).padStart(2, '0')} ${d.toLocaleString('id-ID', { month: 'short' })} ${d.getUTCFullYear()}`;
-}
+const formatDate = (dateStr) => {
+  if (!dateStr) return '-';
+  return new Intl.DateTimeFormat('id-ID', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(new Date(dateStr));
+};
 
 // Fungsi buka file barcode (URL dari backend)
 function openFile(filename) {
   if (!filename) return;
-  const baseUrl = API_BASE_URL || 'http://localhost:8000';
-  const url = `${baseUrl}/uploads/${filename}`;
+  //const baseUrl = API_BASE_URL || 'http://localhost:8000';
+  const url = `${API_BASE_URL}/uploads/${filename}`;
   window.open(url, '_blank');
 }
+
 </script>
 
 <style scoped>
